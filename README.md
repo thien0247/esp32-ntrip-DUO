@@ -12,7 +12,7 @@ Although it is primarly intended for the WiFi NTRIP Master, this software can ru
 - TCP/UDP Socket Server/Client
 
 ## Help
-If you've just received your ESP32 XBee, check out the [Getting Started](https://github.com/nebkat/esp32-xbee/wiki/Getting-Started) page.
+It can be re compiled using ESP-IDF 4.1.
 
 To install the latest firmware check out the [Firmware Update](https://github.com/nebkat/esp32-xbee/wiki/Firmware-Update) page.
 
