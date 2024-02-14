@@ -1,4 +1,5 @@
 # ESP32 NTRIP Duo
+This is modified version of ESP32 xbee.
 ESP32 NTRIP Duo is made with [ESP-IDF](https://github.com/espressif/esp-idf). Its main function is to forward the UART of the ESP32 to a variety of protocols over WiFi.
 
 This software can run on any ESP32.
