@@ -1,22 +1,22 @@
-# ESP32 XBee
-ESP32 XBee is the official firmware for the Ardusimple [WiFi NTRIP Master](https://www.ardusimple.com/product/wifi-ntrip-master/) ESP32 XBee device [[3D model]](https://github.com/nebkat/esp32-xbee/blob/master/esp32-xbee-board.step), made with [ESP-IDF](https://github.com/espressif/esp-idf). Its main function is to forward the UART of the ESP32 to a variety of protocols over WiFi.
+# ESP32 NTRIP Duo
+ESP32 NTRIP Duo is made with [ESP-IDF](https://github.com/espressif/esp-idf). Its main function is to forward the UART of the ESP32 to a variety of protocols over WiFi.
 
-Although it is primarly intended for the WiFi NTRIP Master, this software can run on any ESP32 with minimal modifications to the GPIO configuration.
+This software can run on any ESP32.
 
 ## Features
 - WiFi Station
 - WiFi Hotspot
 - Web Interface
 - UART configuration
-- NTRIP Client/Server/Caster
-- TCP/UDP Socket Server/Client
+- NTRIP Client/Server/
+
 
 ## Help
 It can be compiled using ESP-IDF 4.1.
 
-To install the latest firmware check out the [Firmware Update](https://github.com/nebkat/esp32-xbee/wiki/Firmware-Update) page.
+To install the latest firmware use ESPHome web Flasher https://web.esphome.io/
 
-If you are experiencing problems with the firmware, please see the [Reporting Crashes](https://github.com/nebkat/esp32-xbee/wiki/Reporting-Crashes) page.
+It is still work in progress!!!
 
 ## Pinout
-[![Pinout diagram](https://i.imgur.com/mjqNXxb.png)](https://github.com/nebkat/esp32-xbee/wiki/Pinout)
+
