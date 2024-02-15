@@ -10,11 +10,9 @@ idf_component_register(SRCS "main.c"
 		"util.c"
 		"web_server.c"
 		"wifi.c"
-		"interface/ntrip_caster.c"
-		"interface/ntrip_client.c"
 		"interface/ntrip_server.c"
-		"interface/socket_client.c"
-		"interface/socket_server.c"
+		"interface/ntrip_server_2.c"
+
 		"protocol/nmea.c"
         INCLUDE_DIRS "include")
 

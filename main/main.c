@@ -18,7 +18,7 @@
 #include <web_server.h>
 #include <log.h>
 #include <status_led.h>
-#include <interface/socket_client.h>
+
 #include <esp_sntp.h>
 #include <core_dump.h>
 #include <esp_ota_ops.h>
@@ -33,7 +33,7 @@
 
 #include "config.h"
 #include "wifi.h"
-#include "interface/socket_server.h"
+
 #include "uart.h"
 #include "interface/ntrip.h"
 #include "tasks.h"
@@ -126,12 +126,12 @@ void app_main()
 
     web_server_init();
 
-    ntrip_caster_init();
-    ntrip_server_init();
-    ntrip_client_init();
 
-    socket_server_init();
-    socket_client_init();
+    ntrip_server_init();
+    ntrip_server_2_init();
+
+
+
 
     uart_nmea("$PESP,INIT,COMPLETE");
 

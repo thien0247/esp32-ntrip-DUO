@@ -25,7 +25,6 @@
 
 #include "uart.h"
 #include "config.h"
-#include "interface/socket_server.h"
 #include "tasks.h"
 
 static const char *TAG = "UART";

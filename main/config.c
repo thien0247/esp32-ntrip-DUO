@@ -102,6 +102,37 @@ const config_item_t CONFIG_ITEMS[] = {
         },
 
         {
+                .key = KEY_CONFIG_NTRIP_SERVER_2_ACTIVE,
+                .type = CONFIG_ITEM_TYPE_BOOL,
+                .def.bool1 = false
+        }, {
+                .key = KEY_CONFIG_NTRIP_SERVER_2_COLOR,
+                .type = CONFIG_ITEM_TYPE_COLOR,
+                .def.color.rgba = 0x00000055u
+        }, {
+                .key = KEY_CONFIG_NTRIP_SERVER_2_HOST,
+                .type = CONFIG_ITEM_TYPE_STRING,
+                .def.str = ""
+        }, {
+                .key = KEY_CONFIG_NTRIP_SERVER_2_PORT,
+                .type = CONFIG_ITEM_TYPE_UINT16,
+                .def.uint16 = 2101
+        }, {
+                .key = KEY_CONFIG_NTRIP_SERVER_2_MOUNTPOINT,
+                .type = CONFIG_ITEM_TYPE_STRING,
+                .def.str = ""
+        }, {
+                .key = KEY_CONFIG_NTRIP_SERVER_2_USERNAME,
+                .type = CONFIG_ITEM_TYPE_STRING,
+                .def.str = ""
+        }, {
+                .key = KEY_CONFIG_NTRIP_SERVER_2_PASSWORD,
+                .type = CONFIG_ITEM_TYPE_STRING,
+                .secret = true,
+                .def.str = ""
+        },
+
+        {
                 .key = KEY_CONFIG_NTRIP_CLIENT_ACTIVE,
                 .type = CONFIG_ITEM_TYPE_BOOL,
                 .def.bool1 = false
@@ -130,78 +161,6 @@ const config_item_t CONFIG_ITEMS[] = {
                 .type = CONFIG_ITEM_TYPE_STRING,
                 .secret = true,
                 .def.str = ""
-        },
-
-        {
-                .key = KEY_CONFIG_NTRIP_CASTER_ACTIVE,
-                .type = CONFIG_ITEM_TYPE_BOOL,
-                .def.bool1 = false
-        }, {
-                .key = KEY_CONFIG_NTRIP_CASTER_COLOR,
-                .type = CONFIG_ITEM_TYPE_COLOR,
-                .def.color.rgba = 0x00000055u
-        }, {
-                .key = KEY_CONFIG_NTRIP_CASTER_PORT,
-                .type = CONFIG_ITEM_TYPE_UINT16,
-                .def.uint16 = 2101
-        }, {
-                .key = KEY_CONFIG_NTRIP_CASTER_MOUNTPOINT,
-                .type = CONFIG_ITEM_TYPE_STRING,
-                .def.str = ""
-        }, {
-                .key = KEY_CONFIG_NTRIP_CASTER_USERNAME,
-                .type = CONFIG_ITEM_TYPE_STRING,
-                .def.str = ""
-        }, {
-                .key = KEY_CONFIG_NTRIP_CASTER_PASSWORD,
-                .type = CONFIG_ITEM_TYPE_STRING,
-                .secret = true,
-                .def.str = ""
-        },
-
-        // Socket
-        {
-                .key = KEY_CONFIG_SOCKET_SERVER_ACTIVE,
-                .type = CONFIG_ITEM_TYPE_BOOL,
-                .def.bool1 = false
-        }, {
-                .key = KEY_CONFIG_SOCKET_SERVER_COLOR,
-                .type = CONFIG_ITEM_TYPE_COLOR,
-                .def.color.rgba = 0x00000055u
-        }, {
-                .key = KEY_CONFIG_SOCKET_SERVER_TCP_PORT,
-                .type = CONFIG_ITEM_TYPE_UINT16,
-                .def.uint16 = 23
-        }, {
-                .key = KEY_CONFIG_SOCKET_SERVER_UDP_PORT,
-                .type = CONFIG_ITEM_TYPE_UINT16,
-                .def.uint16 = 23
-        },
-
-        {
-                .key = KEY_CONFIG_SOCKET_CLIENT_ACTIVE,
-                .type = CONFIG_ITEM_TYPE_BOOL,
-                .def.bool1 = false
-        }, {
-                .key = KEY_CONFIG_SOCKET_CLIENT_COLOR,
-                .type = CONFIG_ITEM_TYPE_COLOR,
-                .def.color.rgba = 0x00000055u
-        }, {
-                .key = KEY_CONFIG_SOCKET_CLIENT_HOST,
-                .type = CONFIG_ITEM_TYPE_STRING,
-                .def.str = ""
-        }, {
-                .key = KEY_CONFIG_SOCKET_CLIENT_PORT,
-                .type = CONFIG_ITEM_TYPE_UINT16,
-                .def.uint16 = 23
-        }, {
-                .key = KEY_CONFIG_SOCKET_CLIENT_TYPE_TCP_UDP,
-                .type = CONFIG_ITEM_TYPE_BOOL,
-                .def.bool1 = true
-        }, {
-                .key = KEY_CONFIG_SOCKET_CLIENT_CONNECT_MESSAGE,
-                .type = CONFIG_ITEM_TYPE_STRING,
-                .def.str = "\n"
         },
 
         // UART
