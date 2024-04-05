@@ -23,4 +23,4 @@ To install the latest firmware use ESPHome web Flasher https://web.esphome.io/
 It is still work in progress!!!
 
 ## Pinout
-
+By default it is set for gpio1, gpio3
