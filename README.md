@@ -18,7 +18,7 @@ This software can run on ESP32 WROOM type.
 
 
 ## Help
-It can be compiled using ESP-IDF 4.1.
+Now It can be compiled using ESP-IDF 5.4. (with some depreciation comments)
 
 To install the latest firmware use ESPHome web Flasher https://web.esphome.io/
 
