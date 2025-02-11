@@ -28,6 +28,9 @@ It is still work in progress!!!
 By default it is set for UART0 TX gpio1, RX gpio3
 
 LED output:
+
 gpio21 Red
+
 gpio22 Green
+
 gpio23 Blue
