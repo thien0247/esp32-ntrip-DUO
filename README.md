@@ -22,6 +22,8 @@ Now It can be compiled using ESP-IDF 5.4. (with some depreciation comments)
 
 To install the latest firmware use ESPHome web Flasher https://web.esphome.io/
 
+Here is installation video https://youtu.be/33Mu5EV7fOE?si=J6kwCt6bbmIu7HnS
+
 It is still work in progress!!!
 
 ## Pinout
