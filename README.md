@@ -27,7 +27,7 @@ It is still work in progress!!!
 ## Pinout
 By default it is set for UART0 TX gpio1, RX gpio3
 
-LED output:
+LED with common positive output:
 
 gpio21 Red
 
