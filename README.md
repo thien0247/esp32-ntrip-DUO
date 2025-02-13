@@ -29,7 +29,7 @@ It is still work in progress!!!
 ## Pinout
 By default it is set for UART0 TX gpio1, RX gpio3 including ESP32S3
 
-LED with common positive output:
+LED with common positive and low output:
 
 ESP32: gpio21 Red, gpio22 Green, gpio23 Blue
 
