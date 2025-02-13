@@ -27,13 +27,11 @@ Here is installation video https://youtu.be/33Mu5EV7fOE?si=J6kwCt6bbmIu7HnS
 It is still work in progress!!!
 
 ## Pinout
-By default it is set for UART0 TX gpio1, RX gpio3
+By default it is set for UART0 TX gpio1, RX gpio3 including ESP32S3
 
 LED with common positive output:
 
-gpio21 Red
+ESP32: gpio21 Red, gpio22 Green, gpio23 Blue
 
-gpio22 Green
-
-gpio23 Blue
+ESP32S3: gpio4 Red, gpio5 Green, gpio6 Blue
 ![IMG_20250212_000825](https://github.com/user-attachments/assets/f17d28dc-4bc7-4647-8311-7a1c44526d17)
