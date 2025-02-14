@@ -7,8 +7,8 @@ ESP32 NTRIP Duo is made with [ESP-IDF](https://github.com/espressif/esp-idf). It
 
 In this version Installation is simplified, with just a single bin file. You can use ESPHome web flasher https://web.esphome.io/ just connect your ESP32 dev board to PC, select connect, cho0se correct COM port, connect and install. On popup choose bin file and click install.
 
-This software can run on ESP32 WROOM type. Now added ESP32S3! Just choose correct bin file!
-
+This software can run on ESP32 WROOM type. Now added ESP32S3, ESP32C3, ESP32S2  Just choose correct bin file!
+For ESP32S2 if ESPHome is not connecting (it didn't with S2mini) You can use https://tasmota.github.io/install/ to install with single bin file.
 ## Features
 - WiFi Station
 - WiFi Hotspot
