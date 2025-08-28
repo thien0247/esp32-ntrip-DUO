@@ -86,6 +86,22 @@ typedef struct config_item {
 #define KEY_CONFIG_NTRIP_SERVER_2_USERNAME "ntr_srv2_user"
 #define KEY_CONFIG_NTRIP_SERVER_2_PASSWORD "ntr_srv2_pass"
 
+#define KEY_CONFIG_NTRIP_SERVER_3_ACTIVE "ntr_srv3_active"
+#define KEY_CONFIG_NTRIP_SERVER_3_COLOR "ntr_srv3_color"
+#define KEY_CONFIG_NTRIP_SERVER_3_HOST "ntr_srv3_host"
+#define KEY_CONFIG_NTRIP_SERVER_3_PORT "ntr_srv3_port"
+#define KEY_CONFIG_NTRIP_SERVER_3_MOUNTPOINT "ntr_srv3_mp"
+#define KEY_CONFIG_NTRIP_SERVER_3_USERNAME "ntr_srv3_user"
+#define KEY_CONFIG_NTRIP_SERVER_3_PASSWORD "ntr_srv3_pass"
+
+#define KEY_CONFIG_NTRIP_SERVER_4_ACTIVE "ntr_srv4_active"
+#define KEY_CONFIG_NTRIP_SERVER_4_COLOR "ntr_srv4_color"
+#define KEY_CONFIG_NTRIP_SERVER_4_HOST "ntr_srv4_host"
+#define KEY_CONFIG_NTRIP_SERVER_4_PORT "ntr_srv4_port"
+#define KEY_CONFIG_NTRIP_SERVER_4_MOUNTPOINT "ntr_srv4_mp"
+#define KEY_CONFIG_NTRIP_SERVER_4_USERNAME "ntr_srv4_user"
+#define KEY_CONFIG_NTRIP_SERVER_4_PASSWORD "ntr_srv4_pass"
+
 #define KEY_CONFIG_NTRIP_CLIENT_ACTIVE "ntr_cli_active"
 #define KEY_CONFIG_NTRIP_CLIENT_COLOR "ntr_cli_color"
 #define KEY_CONFIG_NTRIP_CLIENT_HOST "ntr_cli_host"

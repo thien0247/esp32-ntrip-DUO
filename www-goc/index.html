@@ -1,6 +1,6 @@
 <html>
 <head>
-    <title>NTRIP Config</title>
+    <title>ESP32 XBee Config</title>
     <script src="jquery-3.4.1.min.js"></script>
     <script src="bs-4.3.1.bundle.min.js"></script>
     <link rel="stylesheet" href="bs-4.3.1.min.css">
@@ -472,9 +472,9 @@
 <body class="bg-light">
     <div class="container">
         <div class="pt-5 text-center">
-            <h2>NTRIP CONFIG <a id="project-version" href="#" class="text-muted small"></a> <a id="prerelease-available" class="text-info small" style="display: none">NTRIP.IO.VN</a></h2>
+            <h2>ESP32 NTRIP Duo <a id="project-version" href="https://github.com/nebkat/esp32-xbee/releases" class="text-muted small"></a> <a id="prerelease-available" class="text-info small" style="display: none">(beta available)</a></h2>
 
-            <p class="lead">Điều chỉnh các thiết lập bên dưới và nhấn "Lưu". Thiết bị sẽ khởi động lại với cấu hình mới. Nếu bạn thay đổi cài đặt WiFi, thiết bị có thể chuyển sang địa chỉ IP mới hoặc bạn cần kết nối lại vào điểm phát sóng của thiết bị.</p>
+            <p class="lead">Adjust the settings below and then click on "Submit". The device will restart with the new settings applied. If you have adjusted WiFi settings the device may be moved onto a new IP address, or require you to reconnect to its access point.</p>
         </div>
         <form class="needs-validation" id="form" novalidate>
             <div class="row mb-1">
@@ -716,7 +716,7 @@
                 <div class="col-xl-6">
                     <div class="card mb-3">
                         <div class="card-header">
-                            WiFi hotspot / Phát sóng Wifi
+                            WiFi hotspot
                             <small class="wifi-ap-status"></small>
                             <div class="custom-control custom-switch d-inline float-right active">
                                 <input type="checkbox" name="w_ap_active" value="1" checked class="custom-control-input" id="switch-wifi-ap">
@@ -792,7 +792,7 @@
                                         <div class="input-group-append input-group-prepend">
                                             <span class="input-group-text">-</span>
                                         </div>
-                                        <input type="number" name="w_ap_ip_max" value="10" disabled class="form-control text-center px-1">
+                                        <input type="number" name="w_ap_ip_max" value="254" disabled class="form-control text-center px-1">
                                     </div>
                                 </div>
                             </div>
@@ -929,7 +929,7 @@
 
                     <div class="card mb-3">
                         <div class="card-header">
-                            Máy chủ NTRIP A
+                            NTRIP server A
                             <small class="ntrip-server-stats stream-stats" data-stream="ntrip_server"></small>
                             <div class="custom-control custom-switch d-inline float-right">
                                 <input type="checkbox" name="ntr_srv_active" value="1" class="custom-control-input" id="switch-ntrip-server">
@@ -944,11 +944,11 @@
                                 <div class="col">
                                     <label>Host and port</label>
                                     <div class="input-group">
-                                        <input type="text" name="ntr_srv_host" class="form-control" style="flex-grow: 3" value="n.ntrip.io.vn" required>
+                                        <input type="text" name="ntr_srv_host" class="form-control" style="flex-grow: 3" required>
                                         <div class="input-group-append input-group-prepend">
                                             <span class="input-group-text">:</span>
                                         </div>
-                                        <input type="number" name="ntr_srv_port" maxlength="5" min="0" max="65535" value="2101" class="form-control" required>
+                                        <input type="number" name="ntr_srv_port" maxlength="5" min="0" max="65535" class="form-control" required>
                                     </div>
                                 </div>
                                 <div class="col">
@@ -989,8 +989,8 @@
                     </div>
                     <div class="card mb-3">
                         <div class="card-header">
-                            Máy chủ NTRIP B
-                            <small class="ntrip-server-2-stats stream-stats" data-stream="ntrip_server_2"></small>
+                            NTRIP server B
+                            <small class="ntrip-server-2-stats stream-stats" data-stream="ntrip_server"></small>
                             <div class="custom-control custom-switch d-inline float-right">
                                 <input type="checkbox" name="ntr_srv2_active" value="1" class="custom-control-input" id="switch-ntrip-server-2">
                                 <label class="custom-control-label" for="switch-ntrip-server-2"></label>
@@ -1042,100 +1042,6 @@
                                     <label>Password</label>
                                     <div class="input-group">
                                         <input type="password" name="ntr_srv2_pass" class="form-control">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card mb-3">
-                        <div class="card-header">
-                            Máy chủ NTRIP C
-                            <small class="ntrip-server-3-stats stream-stats" data-stream="ntrip_server_3"></small>
-                            <div class="custom-control custom-switch d-inline float-right">
-                                <input type="checkbox" name="ntr_srv3_active" value="1" class="custom-control-input" id="switch-ntrip-server-3">
-                                <label class="custom-control-label" for="switch-ntrip-server-3"></label>
-                            </div>
-                            <div class="d-inline mr-1 float-right">
-                                <input type="color" name="ntr_srv3_color" data-disable-if="#switch-ntrip-server-3" value="#ffffff" id="color-ntrip-server-3">
-                            </div>
-                        </div>
-                        <div class="card-body" data-disable-if="#switch-ntrip-server-3">
-                            <div class="form-row mb-3">
-                                <div class="col">
-                                    <label>Host and port</label>
-                                    <div class="input-group">
-                                        <input type="text" name="ntr_srv3_host" class="form-control" style="flex-grow: 3" required>
-                                        <div class="input-group-append input-group-prepend">
-                                            <span class="input-group-text">:</span>
-                                        </div>
-                                        <input type="number" name="ntr_srv3_port" maxlength="5" min="0" max="65535" class="form-control" required>
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <label>Mountpoint</label>
-                                    <div class="input-group">
-                                        <input type="text" name="ntr_srv3_mp" class="form-control" maxlength="32" required>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-row mb-3">
-                                <div class="col">
-                                    <label>Username</label>
-                                    <div class="input-group">
-                                        <input type="text" name="ntr_srv3_user" class="form-control">
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <label>Password</label>
-                                    <div class="input-group">
-                                        <input type="password" name="ntr_srv3_pass" class="form-control">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card mb-3">
-                        <div class="card-header">
-                            Máy chủ NTRIP D
-                            <small class="ntrip-server-4-stats stream-stats" data-stream="ntrip_server_4"></small>
-                            <div class="custom-control custom-switch d-inline float-right">
-                                <input type="checkbox" name="ntr_srv4_active" value="1" class="custom-control-input" id="switch-ntrip-server-4">
-                                <label class="custom-control-label" for="switch-ntrip-server-4"></label>
-                            </div>
-                            <div class="d-inline mr-1 float-right">
-                                <input type="color" name="ntr_srv4_color" data-disable-if="#switch-ntrip-server-4" value="#ffffff" id="color-ntrip-server-4">
-                            </div>
-                        </div>
-                        <div class="card-body" data-disable-if="#switch-ntrip-server-4">
-                            <div class="form-row mb-3">
-                                <div class="col">
-                                    <label>Host and port</label>
-                                    <div class="input-group">
-                                        <input type="text" name="ntr_srv4_host" class="form-control" style="flex-grow: 3" required>
-                                        <div class="input-group-append input-group-prepend">
-                                            <span class="input-group-text">:</span>
-                                        </div>
-                                        <input type="number" name="ntr_srv4_port" maxlength="5" min="0" max="65535" class="form-control" required>
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <label>Mountpoint</label>
-                                    <div class="input-group">
-                                        <input type="text" name="ntr_srv4_mp" class="form-control" maxlength="32" required>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-row mb-3">
-                                <div class="col">
-                                    <label>Username</label>
-                                    <div class="input-group">
-                                        <input type="text" name="ntr_srv4_user" class="form-control">
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <label>Password</label>
-                                    <div class="input-group">
-                                        <input type="password" name="ntr_srv4_pass" class="form-control">
                                     </div>
                                 </div>
                             </div>
@@ -1210,7 +1116,7 @@
     <footer id="footer" class="bg-dark">
         <div class="container">
             <div class="text-center text-light">
-                <small>&copy; </a> 2025 - <a href="https://ntrip.io.vn" class="text-white">NTRIP.IO.VN</a> - Uptime <span class="uptime">loading...</span> - Heap <span class="heap">loading...</span></small>
+                <small>&copy; </a> 2024 - <a href="https://github.com/incarvr6" class="text-white">GitHub</a> - <a href="https://github.com/incarvr6/esp32-ntrip" class="text-white">Project</a> - Uptime <span class="uptime">loading...</span> - Heap <span class="heap">loading...</span></small>
             </div>
         </div>
     </footer>
@@ -1218,12 +1124,12 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Đang chờ khởi động lại...</h4>
+                    <h4 class="modal-title">Waiting for restart...</h4>
                 </div>
                 <div class="modal-body">
-                    <p>Thiết bị đã được khởi động lại để áp dụng cấu hình mới.</p>
-                    <p>Vui lòng chờ vài giây, trang này sẽ tự động tải lại.</p>
-                    <p>Nếu bạn đã thay đổi cài đặt WiFi hoặc đang sử dụng điểm phát sóng WiFi của thiết bị này, bạn có thể cần kiểm tra lại kết nối WiFi của thiết bị, hoặc đọc địa chỉ IP mới từ cổng serial.</p>
+                    <p>The ESP32 XBee has been restarted to apply the new configuration.</p>
+                    <p>Please wait a few seconds, and this page will automatically reload.</p>
+                    <p>If you have made changes to the WiFi connection, or are using the ESP32's WiFi hotspot, you may need to check your device's WiFi connection, or read the new IP address from a serial terminal.</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" onclick="window.location.reload()">Reload</button>

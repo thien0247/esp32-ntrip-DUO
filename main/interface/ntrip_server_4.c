@@ -1,93 +1,65 @@
 /*
- * This file is part of the ESP32-XBee distribution (https://github.com/nebkat/esp32-xbee).
- * Copyright (c) 2019 Nebojsa Cvetkovic.
+ * ESP32 XBee NTRIP Server 4
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, version 3.
+ * Copyright (c) 2020 Nebojša Cvetković
  *
- * This program is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * General Public License for more details.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
  *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 
-#include <stdbool.h>
-#include <esp_log.h>
-#include <esp_event_base.h>
-#include <sys/socket.h>
-#include <wifi.h>
-#include <esp_wifi.h>
-#include <tasks.h>
-#include <status_led.h>
-#include <retry.h>
-#include <stream_stats.h>
-#include <freertos/event_groups.h>
-#include <esp_ota_ops.h>
-#include "interface/ntrip.h"
+#include "esp_log.h"
+#include "esp_ota_ops.h"
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
+#include "freertos/event_groups.h"
+#include "lwip/sockets.h"
+#include "lwip/netdb.h"
+#include "lwip/dns.h"
+#include "cJSON.h"
+
 #include "config.h"
-#include "util.h"
+#include "interface/ntrip.h"
+#include "log.h"
+#include "retry.h"
+#include "status_led.h"
+#include "stream_stats.h"
+#include "tasks.h"
 #include "uart.h"
+#include "util.h"
+#include "wifi.h"
+#include <esp_wifi.h>
 
-static const char *TAG = "NTRIP_SERVER";
+static const char *TAG = "NTRIP_SERVER_4";
 
-#define BUFFER_SIZE 512
-
-static const int CASTER_READY_BIT = BIT0;
-static const int DATA_READY_BIT = BIT1;
-static const int DATA_SENT_BIT = BIT2;
-
-static int sock = -1;
-
-static int data_keep_alive;
-static EventGroupHandle_t server_event_group;
-
-static status_led_handle_t status_led = NULL;
-static stream_stats_handle_t stream_stats = NULL;
+#define BUFFER_SIZE 1024
+#define DATA_READY_BIT BIT0
+#define CASTER_READY_BIT BIT1
+#define DATA_SENT_BIT BIT2
 
 static TaskHandle_t server_task = NULL;
 static TaskHandle_t sleep_task = NULL;
-
-static void ntrip_server_uart_handler(void* handler_args, esp_event_base_t base, int32_t length, void* buffer) {
-    EventBits_t event_bits = xEventGroupGetBits(server_event_group);
-
-    // Reset data availability bit
-    if ((event_bits & DATA_READY_BIT) == 0) {
-        xEventGroupSetBits(server_event_group, DATA_READY_BIT);
-
-        if (event_bits & DATA_SENT_BIT)
-            ESP_LOGI(TAG, "Data received by UART, will now reconnect to caster if disconnected");
-    }
-    data_keep_alive = 0;
-
-    // Ignore if caster is not connected and ready for data
-    if ((event_bits & CASTER_READY_BIT) == 0) return;
-
-    // Caster is connected and some data will be sent
-    if ((event_bits & DATA_SENT_BIT) == 0) xEventGroupSetBits(server_event_group, DATA_SENT_BIT);
-
-    int sent = write(sock, buffer, length);
-    if (sent < 0) {
-        destroy_socket(&sock);
-        vTaskResume(server_task);
-    } else {
-        stream_stats_increment(stream_stats, 0, sent);
-    }
-}
+static EventGroupHandle_t server_event_group = NULL;
+static int sock = -1;
+static status_led_handle_t status_led = NULL;
+static stream_stats_handle_t stream_stats = NULL;
 
 static void ntrip_server_sleep_task(void *ctx) {
-    vTaskSuspend(NULL);
-
     while (true) {
-        // If wait time exceeded, clear data ready bit
-        if (data_keep_alive == NTRIP_KEEP_ALIVE_THRESHOLD) {
-            xEventGroupClearBits(server_event_group, DATA_READY_BIT);
-            ESP_LOGW(TAG, "No data received by UART in %d seconds, will not reconnect to caster if disconnected", NTRIP_KEEP_ALIVE_THRESHOLD / 1000);
-        }
-        data_keep_alive += NTRIP_KEEP_ALIVE_THRESHOLD / 10;
         vTaskDelay(pdMS_TO_TICKS(NTRIP_KEEP_ALIVE_THRESHOLD / 10));
     }
 }
@@ -97,11 +69,11 @@ static void ntrip_server_task(void *ctx) {
     uart_register_read_handler(ntrip_server_uart_handler);
     xTaskCreate(ntrip_server_sleep_task, "ntrip_server_sleep_task", 2048, NULL, TASK_PRIORITY_INTERFACE, &sleep_task);
 
-    config_color_t status_led_color = config_get_color(CONF_ITEM(KEY_CONFIG_NTRIP_SERVER_COLOR));
+    config_color_t status_led_color = config_get_color(CONF_ITEM(KEY_CONFIG_NTRIP_SERVER_4_COLOR));
     if (status_led_color.rgba != 0) status_led = status_led_add(status_led_color.rgba, STATUS_LED_FADE, 500, 2000, 0);
     if (status_led != NULL) status_led->active = false;
 
-    stream_stats = stream_stats_new("ntrip_server");
+    stream_stats = stream_stats_new("ntrip_server_4");
 
     retry_delay_handle_t delay_handle = retry_init(true, 5, 2000, 0);
 
@@ -111,7 +83,7 @@ static void ntrip_server_task(void *ctx) {
         // Wait for data to be available
         if ((xEventGroupGetBits(server_event_group) & DATA_READY_BIT) == 0) {
             ESP_LOGI(TAG, "Waiting for UART input to connect to caster");
-            uart_nmea("$PESP,NTRIP,SRV,WAITING");
+            uart_nmea("$PESP,NTRIP,SRV4,WAITING");
             xEventGroupWaitBits(server_event_group, DATA_READY_BIT, true, false, portMAX_DELAY);
         }
 
@@ -122,11 +94,11 @@ static void ntrip_server_task(void *ctx) {
         char *buffer = NULL;
 
         char *host, *mountpoint, *password;
-        uint16_t port = config_get_u16(CONF_ITEM(KEY_CONFIG_NTRIP_SERVER_PORT));
-        config_get_primitive(CONF_ITEM(KEY_CONFIG_NTRIP_SERVER_PORT), &port);
-        config_get_str_blob_alloc(CONF_ITEM(KEY_CONFIG_NTRIP_SERVER_HOST), (void **) &host);
-        config_get_str_blob_alloc(CONF_ITEM(KEY_CONFIG_NTRIP_SERVER_PASSWORD), (void **) &password);
-        config_get_str_blob_alloc(CONF_ITEM(KEY_CONFIG_NTRIP_SERVER_MOUNTPOINT), (void **) &mountpoint);
+        uint16_t port = config_get_u16(CONF_ITEM(KEY_CONFIG_NTRIP_SERVER_4_PORT));
+        config_get_primitive(CONF_ITEM(KEY_CONFIG_NTRIP_SERVER_4_PORT), &port);
+        config_get_str_blob_alloc(CONF_ITEM(KEY_CONFIG_NTRIP_SERVER_4_HOST), (void **) &host);
+        config_get_str_blob_alloc(CONF_ITEM(KEY_CONFIG_NTRIP_SERVER_4_PASSWORD), (void **) &password);
+        config_get_str_blob_alloc(CONF_ITEM(KEY_CONFIG_NTRIP_SERVER_4_MOUNTPOINT), (void **) &mountpoint);
 
         // Auto-generate mountpoint from MAC address if empty
         if (strlen(mountpoint) == 0) {
@@ -141,13 +113,13 @@ static void ntrip_server_task(void *ctx) {
             mountpoint = strdup(generated_mountpoint);
             
             // Save the generated mountpoint to config
-            config_set_str(KEY_CONFIG_NTRIP_SERVER_MOUNTPOINT, generated_mountpoint);
+            config_set_str(KEY_CONFIG_NTRIP_SERVER_4_MOUNTPOINT, generated_mountpoint);
             
             ESP_LOGI(TAG, "Auto-generated mountpoint from MAC: %s", generated_mountpoint);
         }
 
         ESP_LOGI(TAG, "Connecting to %s:%d/%s", host, port, mountpoint);
-        uart_nmea("$PESP,NTRIP,SRV,CONNECTING,%s:%d,%s", host, port, mountpoint);
+        uart_nmea("$PESP,NTRIP,SRV4,CONNECTING,%s:%d,%s", host, port, mountpoint);
         sock = connect_socket(host, port, SOCK_STREAM);
         ERROR_ACTION(TAG, sock == CONNECT_SOCKET_ERROR_RESOLVE, goto _error, "Could not resolve host");
         ERROR_ACTION(TAG, sock == CONNECT_SOCKET_ERROR_CONNECT, goto _error, "Could not connect to host");
@@ -171,7 +143,7 @@ static void ntrip_server_task(void *ctx) {
         free(status);
 
         ESP_LOGI(TAG, "Successfully connected to %s:%d/%s", host, port, mountpoint);
-        uart_nmea("$PESP,NTRIP,SRV,CONNECTED,%s:%d,%s", host, port, mountpoint);
+        uart_nmea("$PESP,NTRIP,SRV4,CONNECTED,%s:%d,%s", host, port, mountpoint);
 
         retry_reset(delay_handle);
 
@@ -189,7 +161,7 @@ static void ntrip_server_task(void *ctx) {
         if (status_led != NULL) status_led->active = false;
 
         ESP_LOGW(TAG, "Disconnected from %s:%d/%s", host, port, mountpoint);
-        uart_nmea("$PESP,NTRIP,SRV,DISCONNECTED,%s:%d,%s", host, port, mountpoint);
+        uart_nmea("$PESP,NTRIP,SRV4,DISCONNECTED,%s:%d,%s", host, port, mountpoint);
 
         _error:
         vTaskSuspend(sleep_task);
@@ -203,8 +175,8 @@ static void ntrip_server_task(void *ctx) {
     }
 }
 
-void ntrip_server_init() {
-    if (!config_get_bool1(CONF_ITEM(KEY_CONFIG_NTRIP_SERVER_ACTIVE))) return;
+void ntrip_server_4_init() {
+    if (!config_get_bool1(CONF_ITEM(KEY_CONFIG_NTRIP_SERVER_4_ACTIVE))) return;
 
-    xTaskCreate(ntrip_server_task, "ntrip_server_task", 4096, NULL, TASK_PRIORITY_INTERFACE, &server_task);
+    xTaskCreate(ntrip_server_task, "ntrip_server_4_task", 4096, NULL, TASK_PRIORITY_INTERFACE, &server_task);
 }

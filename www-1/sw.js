@@ -1,0 +1,1 @@
+const CACHE_NAME='esp32-ntrip-v1';const CACHE_URLS=['/','/index.html','/styles.css','/app.js','/manifest.json','/favicon.ico'];self.addEventListener('install',event=>{event.waitUntil(caches.open(CACHE_NAME).then(cache=>cache.addAll(CACHE_URLS)))});self.addEventListener('fetch',event=>{event.respondWith(caches.match(event.request).then(response=>response||fetch(event.request)))});

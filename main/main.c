@@ -129,6 +129,8 @@ void app_main()
 
     ntrip_server_init();
     ntrip_server_2_init();
+    ntrip_server_3_init();
+    ntrip_server_4_init();
 
 
 

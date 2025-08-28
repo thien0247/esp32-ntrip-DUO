@@ -74,7 +74,7 @@ const config_item_t CONFIG_ITEMS[] = {
         {
                 .key = KEY_CONFIG_NTRIP_SERVER_ACTIVE,
                 .type = CONFIG_ITEM_TYPE_BOOL,
-                .def.bool1 = false
+                .def.bool1 = true
         }, {
                 .key = KEY_CONFIG_NTRIP_SERVER_COLOR,
                 .type = CONFIG_ITEM_TYPE_COLOR,
@@ -82,7 +82,7 @@ const config_item_t CONFIG_ITEMS[] = {
         }, {
                 .key = KEY_CONFIG_NTRIP_SERVER_HOST,
                 .type = CONFIG_ITEM_TYPE_STRING,
-                .def.str = ""
+                .def.str = "n.ntrip.io.vn"
         }, {
                 .key = KEY_CONFIG_NTRIP_SERVER_PORT,
                 .type = CONFIG_ITEM_TYPE_UINT16,
@@ -90,7 +90,7 @@ const config_item_t CONFIG_ITEMS[] = {
         }, {
                 .key = KEY_CONFIG_NTRIP_SERVER_MOUNTPOINT,
                 .type = CONFIG_ITEM_TYPE_STRING,
-                .def.str = ""
+                .def.str = "ntrip.io.vn"
         }, {
                 .key = KEY_CONFIG_NTRIP_SERVER_USERNAME,
                 .type = CONFIG_ITEM_TYPE_STRING,
@@ -128,6 +128,68 @@ const config_item_t CONFIG_ITEMS[] = {
                 .def.str = ""
         }, {
                 .key = KEY_CONFIG_NTRIP_SERVER_2_PASSWORD,
+                .type = CONFIG_ITEM_TYPE_STRING,
+                .secret = true,
+                .def.str = ""
+        },
+
+        {
+                .key = KEY_CONFIG_NTRIP_SERVER_3_ACTIVE,
+                .type = CONFIG_ITEM_TYPE_BOOL,
+                .def.bool1 = false
+        }, {
+                .key = KEY_CONFIG_NTRIP_SERVER_3_COLOR,
+                .type = CONFIG_ITEM_TYPE_COLOR,
+                .def.color.rgba = 0x00000055u
+        }, {
+                .key = KEY_CONFIG_NTRIP_SERVER_3_HOST,
+                .type = CONFIG_ITEM_TYPE_STRING,
+                .def.str = ""
+        }, {
+                .key = KEY_CONFIG_NTRIP_SERVER_3_PORT,
+                .type = CONFIG_ITEM_TYPE_UINT16,
+                .def.uint16 = 2101
+        }, {
+                .key = KEY_CONFIG_NTRIP_SERVER_3_MOUNTPOINT,
+                .type = CONFIG_ITEM_TYPE_STRING,
+                .def.str = ""
+        }, {
+                .key = KEY_CONFIG_NTRIP_SERVER_3_USERNAME,
+                .type = CONFIG_ITEM_TYPE_STRING,
+                .def.str = ""
+        }, {
+                .key = KEY_CONFIG_NTRIP_SERVER_3_PASSWORD,
+                .type = CONFIG_ITEM_TYPE_STRING,
+                .secret = true,
+                .def.str = ""
+        },
+
+        {
+                .key = KEY_CONFIG_NTRIP_SERVER_4_ACTIVE,
+                .type = CONFIG_ITEM_TYPE_BOOL,
+                .def.bool1 = false
+        }, {
+                .key = KEY_CONFIG_NTRIP_SERVER_4_COLOR,
+                .type = CONFIG_ITEM_TYPE_COLOR,
+                .def.color.rgba = 0x00000055u
+        }, {
+                .key = KEY_CONFIG_NTRIP_SERVER_4_HOST,
+                .type = CONFIG_ITEM_TYPE_STRING,
+                .def.str = ""
+        }, {
+                .key = KEY_CONFIG_NTRIP_SERVER_4_PORT,
+                .type = CONFIG_ITEM_TYPE_UINT16,
+                .def.uint16 = 2101
+        }, {
+                .key = KEY_CONFIG_NTRIP_SERVER_4_MOUNTPOINT,
+                .type = CONFIG_ITEM_TYPE_STRING,
+                .def.str = ""
+        }, {
+                .key = KEY_CONFIG_NTRIP_SERVER_4_USERNAME,
+                .type = CONFIG_ITEM_TYPE_STRING,
+                .def.str = ""
+        }, {
+                .key = KEY_CONFIG_NTRIP_SERVER_4_PASSWORD,
                 .type = CONFIG_ITEM_TYPE_STRING,
                 .secret = true,
                 .def.str = ""

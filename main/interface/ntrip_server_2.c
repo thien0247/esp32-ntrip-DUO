@@ -20,6 +20,7 @@
 #include <esp_event_base.h>
 #include <sys/socket.h>
 #include <wifi.h>
+#include <esp_wifi.h>
 #include <tasks.h>
 #include <status_led.h>
 #include <retry.h>
@@ -126,6 +127,24 @@ static void ntrip_server_task(void *ctx) {
         config_get_str_blob_alloc(CONF_ITEM(KEY_CONFIG_NTRIP_SERVER_2_HOST), (void **) &host);
         config_get_str_blob_alloc(CONF_ITEM(KEY_CONFIG_NTRIP_SERVER_2_PASSWORD), (void **) &password);
         config_get_str_blob_alloc(CONF_ITEM(KEY_CONFIG_NTRIP_SERVER_2_MOUNTPOINT), (void **) &mountpoint);
+
+        // Auto-generate mountpoint from MAC address if empty
+        if (strlen(mountpoint) == 0) {
+            uint8_t mac[6];
+            esp_wifi_get_mac(ESP_IF_WIFI_AP, mac);
+            char generated_mountpoint[32];
+            snprintf(generated_mountpoint, sizeof(generated_mountpoint), "%02X%02X%02X%02X%02X%02X",
+                    mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
+            
+            // Free the old mountpoint and allocate new one
+            free(mountpoint);
+            mountpoint = strdup(generated_mountpoint);
+            
+            // Save the generated mountpoint to config
+            config_set_str(KEY_CONFIG_NTRIP_SERVER_2_MOUNTPOINT, generated_mountpoint);
+            
+            ESP_LOGI(TAG, "Auto-generated mountpoint from MAC: %s", generated_mountpoint);
+        }
 
         ESP_LOGI(TAG, "Connecting to %s:%d/%s", host, port, mountpoint);
         uart_nmea("$PESP,NTRIP,SRV2,CONNECTING,%s:%d,%s", host, port, mountpoint);

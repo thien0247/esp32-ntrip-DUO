@@ -14,6 +14,8 @@
 
 void ntrip_server_init();
 void ntrip_server_2_init();
+void ntrip_server_3_init();
+void ntrip_server_4_init();
 
 
 bool ntrip_response_ok(void *response);
