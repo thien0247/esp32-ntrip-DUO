@@ -42,6 +42,7 @@
 #include "uart.h"
 #include "util.h"
 #include "wifi.h"
+#include <esp_wifi.h>
 
 static const char *TAG = "NTRIP_SERVER_3";
 
